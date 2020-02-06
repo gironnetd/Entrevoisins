@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.entrevoisins.ui.list.neighbour_list;
 
 import android.content.Context;
 import android.os.Bundle;
