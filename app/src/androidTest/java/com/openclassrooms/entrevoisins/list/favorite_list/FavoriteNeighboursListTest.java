@@ -45,7 +45,6 @@ public class FavoriteNeighboursListTest {
     public void setUp() {
         mActivity = mActivityRule.getActivity();
         assertThat(mActivity, notNullValue());
-
     }
 
     @Test
