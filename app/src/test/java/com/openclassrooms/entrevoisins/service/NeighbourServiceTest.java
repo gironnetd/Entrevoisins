@@ -4,6 +4,7 @@ import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,12 @@ public class NeighbourServiceTest {
         initialNeighbourCount = service.getNeighbours().size();
     }
 
+    @After
+    public void tearDown() {
+        service = null;
+        initialNeighbourCount = -1;
+    }
+
     @Test
     public void get_Neighbours_With_Success() {
         List<Neighbour> neighbours = service.getNeighbours();
@@ -49,7 +56,13 @@ public class NeighbourServiceTest {
     @Test
     public void add_Neighbour_With_Success() {
         int neighboursNumber = service.getNeighbours().size();
-        Neighbour newNeighbour = new Neighbour(neighboursNumber + 1,"Jean","","","","");
+        Neighbour newNeighbour = new Neighbour(neighboursNumber + 1,
+                "Jean",
+                "",
+                "",
+                "",
+                "",
+                false);
         service.createNeighbour(newNeighbour);
         assertTrue(service.getNeighbours().size() == neighboursNumber + 1);
 
@@ -58,8 +71,13 @@ public class NeighbourServiceTest {
     @Test
     public void get_Neighbour_By_Id_With_Success() {
         int NEIGHBOUR_ID = initialNeighbourCount + 1;
-        Neighbour newNeighbour = new Neighbour(NEIGHBOUR_ID,"Jean","https://i.pravatar.cc/150?u=a042581f4e29026704d",
-                "24, square Dupont 78150 Le Chesnay","062453649237","Je suis le parcours Développeur d'applications - Android chez OpenClassrooms");
+        Neighbour newNeighbour = new Neighbour(NEIGHBOUR_ID,
+                "Jean",
+                "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+                "24, square Dupont 78150 Le Chesnay",
+                "062453649237",
+                "Je suis le parcours Développeur d'applications - Android chez OpenClassrooms",
+                false);
         service.createNeighbour(newNeighbour);
         Neighbour neighbourById = service.getNeighbourById(NEIGHBOUR_ID);
         assertEquals(newNeighbour.getId(), neighbourById.getId());
@@ -74,8 +92,13 @@ public class NeighbourServiceTest {
     public void get_Favorite_Neighbours_With_Success() {
         int favoriteNumber = 5;
         for(int i = 0; i < favoriteNumber; i++) {
-            Neighbour neighbour = new Neighbour(i + initialNeighbourCount,"", "", "", "", "");
-            neighbour.setFavorite(true);
+            Neighbour neighbour = new Neighbour(i,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    true);
             service.createNeighbour(neighbour);
         }
 
@@ -92,5 +115,7 @@ public class NeighbourServiceTest {
 
         Neighbour neighbourAfterToggle = service.getNeighbourById(NEIGHBOUR_ID);
         assertNotSame(isFavorite, neighbourAfterToggle.getFavorite());
+
+        service.toggleToFavorite(neighbour);
     }
 }

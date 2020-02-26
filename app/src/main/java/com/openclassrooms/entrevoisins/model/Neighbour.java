@@ -26,7 +26,7 @@ public class Neighbour {
     private String aboutMe;
 
     /** is favorite */
-    private Boolean isFavorite = false;
+    private Boolean isFavorite;
 
     /**
      * Constructor
@@ -35,13 +35,14 @@ public class Neighbour {
      * @param avatarUrl
      */
     public Neighbour(long id, String name, String avatarUrl, String address,
-                     String phoneNumber, String aboutMe) {
+                     String phoneNumber, String aboutMe, boolean isFavorite) {
         this.id = id;
         this.name = name;
         this.avatarUrl = avatarUrl;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
+        this.isFavorite = isFavorite;
     }
 
     public long getId() {
@@ -98,6 +99,10 @@ public class Neighbour {
 
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public void toggleFavorite() {
+        isFavorite = !isFavorite;
     }
 
     @Override

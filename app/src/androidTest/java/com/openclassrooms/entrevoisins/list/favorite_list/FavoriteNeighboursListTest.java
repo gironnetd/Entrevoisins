@@ -49,23 +49,17 @@ public class FavoriteNeighboursListTest {
 
     @Test
     public void myNeighboursList_favoritesTab_ShouldDisplayFavoritesOnly() {
-
         // Given : Add 3 neighbours to favorites
         onView(withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new ClickViewAction()));
-
         onView(withId(R.id.fab_favorite)).perform(click());
         onView(withId(R.id.fab_back)).perform(click());
-
         onView(withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(3, new ClickViewAction()));
-
         onView(withId(R.id.fab_favorite)).perform(click());
         onView(withId(R.id.fab_back)).perform(click());
-
         onView(withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(5, new ClickViewAction()));
-
         onView(withId(R.id.fab_favorite)).perform(click());
         onView(withId(R.id.fab_back)).perform(click());
 
