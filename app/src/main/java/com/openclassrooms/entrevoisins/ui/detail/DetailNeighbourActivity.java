@@ -4,25 +4,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.events.ToggleFavoriteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
-import com.openclassrooms.entrevoisins.ui.list.neighbour_list.MyNeighbourRecyclerViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.openclassrooms.entrevoisins.ui.util.Constant.NEIGHBOUR_ID;
 
 public class DetailNeighbourActivity extends AppCompatActivity {
 
@@ -41,11 +40,10 @@ public class DetailNeighbourActivity extends AppCompatActivity {
     @BindView(R.id.tv_detail_about_me)
     TextView aboutMeTextView;
     @BindView(R.id.fab_back)
-    FloatingActionButton fabBack;
+    ImageView fabBack;
     @BindView(R.id.fab_favorite)
     FloatingActionButton fabFavorite;
 
-    private int neighbourId;
     private Neighbour mNeighbour;
     private NeighbourApiService mApiService;
 
@@ -55,7 +53,6 @@ public class DetailNeighbourActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_neighbour);
         ButterKnife.bind(this);
         mApiService = DI.getNeighbourApiService();
-        neighbourId  = getIntent().getIntExtra("neighbourId", -1);
 
         fabBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,15 +74,13 @@ public class DetailNeighbourActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new ToggleFavoriteNeighbourEvent(mNeighbour));
             }
         });
-
     }
 
     /**
      * Init the List of neighbours
      */
     private void initNeighbourDetail() {
-        mNeighbour = mApiService.getNeighbourById(neighbourId);
-        Log.i("neighbour", mNeighbour.getName());
+        mNeighbour = (Neighbour) getIntent().getSerializableExtra(NEIGHBOUR_ID);
         Glide.with(this)
                 .load(mNeighbour.getAvatarUrl())
                 .into(neighbourImage);

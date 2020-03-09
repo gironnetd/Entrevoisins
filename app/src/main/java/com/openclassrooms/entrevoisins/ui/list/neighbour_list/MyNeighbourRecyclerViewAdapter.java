@@ -15,8 +15,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
+import com.openclassrooms.entrevoisins.events.RemoveNeighbourFromFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.ui.detail.DetailNeighbourActivity;
+import com.openclassrooms.entrevoisins.ui.list.favorite_list.FavoritesFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -25,12 +27,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.openclassrooms.entrevoisins.ui.util.Constant.NEIGHBOUR_ID;
+
 public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
+    private String fragmentName;
     private final List<Neighbour> mNeighbours;
 
-    public MyNeighbourRecyclerViewAdapter(List<Neighbour> items) {
+    public MyNeighbourRecyclerViewAdapter(String fragmentName, List<Neighbour> items) {
+        this.fragmentName = fragmentName;
         mNeighbours = items;
     }
 
@@ -54,7 +60,11 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
+                if(fragmentName.equals(NeighbourFragment.class.getName())) {
+                    EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
+                } else if(fragmentName.equals(FavoritesFragment.class.getName())) {
+                    EventBus.getDefault().post(new RemoveNeighbourFromFavoriteEvent(neighbour));
+                }
             }
         });
 
@@ -62,7 +72,7 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailNeighbourActivity.class);
-                intent.putExtra("neighbourId",(int) neighbour.getId());
+                intent.putExtra(NEIGHBOUR_ID, neighbour);
                 ActivityCompat.startActivity(context, intent,null);
             }
         });
